@@ -13,8 +13,10 @@
 #  converting columns in dataframe into factors
 #  https://stackoverflow.com/questions/9251326/convert-data-frame-column-format-from-character-to-factor
 #  https://vitalflux.com/learn-r-convert-columns-character-factor/
-#  factors in R
+#  factors in R (EXCELLENT REFERENCE) - labels vs levels, why this is done and reversed, etc.
 #  https://www.stat.berkeley.edu/~s133/factors.html
+#  frequencies and other tables
+#  https://www.statmethods.net/stats/frequencies.html
 
 
 #library(tidyverse)
@@ -23,13 +25,20 @@
 lab=read.csv("Binge_Drinking.csv")
 
 #factor(lab$gender)
-unique(lab$gender)
+#unique(lab$gender)
 
-lab$gender <- factor(lab$gender,levels=c("Male", "Female"), ordered = TRUE)
-lab$class <- factor(lab$class,levels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher"))
-lab$fratsoro <- factor(lab$fratsoro,levels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
-lab$drinks5 <- factor(lab$drinks5,levels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
-                                           "Six to Nine Binges", "Ten or More Binges"))
+######### CONVERT CHARACTER COLUMNS INTO FACTORS ###############
+
+lab$gender <- factor(lab$gender,labels=c("Male", "Female"))
+lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher"))
+lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
+lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
+                                           "Six to Nine Binges", "Ten or More Binges"), ordered=TRUE)
+
+################# FREQUENCY TABLES ######################
+
+gender.freq = table(lab$gender)
+gender.freq
 
 
 
