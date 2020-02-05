@@ -17,6 +17,8 @@
 #  https://www.stat.berkeley.edu/~s133/factors.html
 #  frequencies and other tables
 #  https://www.statmethods.net/stats/frequencies.html
+#  Table() function not as good as count function in the plyr package
+#  https://www.r-bloggers.com/how-to-get-the-frequency-table-of-a-categorical-variable-as-a-data-frame-in-r/
 
 
 #library(tidyverse)
@@ -36,10 +38,13 @@ lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Bing
                                            "Six to Nine Binges", "Ten or More Binges"), ordered=TRUE)
 
 ################# FREQUENCY TABLES ######################
+library(plyr)
+library(dplyr)
 
-gender.freq = table(lab$gender)
-gender.freq
+gender.frequency <- plyr::count(lab, "gender")
 
+
+arrange(lab, gender)
 
 
 
