@@ -19,9 +19,14 @@
 #  https://www.statmethods.net/stats/frequencies.html
 #  Table() function not as good as count function in the plyr package
 #  https://www.r-bloggers.com/how-to-get-the-frequency-table-of-a-categorical-variable-as-a-data-frame-in-r/
-
+#  Using dplyr package to compute frequencies
+#  https://stackoverflow.com/questions/24576515/relative-frequencies-proportions-with-dplyr
+#  using filter to remove NA when doing a frequency
+#  https://forcats.tidyverse.org/
 
 #library(tidyverse)
+
+library(dplyr)
   
 # read your file
 lab=read.csv("Binge_Drinking.csv")
@@ -31,7 +36,10 @@ lab=read.csv("Binge_Drinking.csv")
 
 ######### CONVERT CHARACTER COLUMNS INTO FACTORS ###############
 
-lab$gender <- factor(lab$gender,labels=c("Male", "Female"))
+lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
+
+
+lab$gender <- factor(lab$gender,labels=c("Male", "Female", "Missing or Unknown"))
 lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher"))
 lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
 lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
@@ -39,10 +47,43 @@ lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Bing
 
 ################# FREQUENCY TABLES ######################
 library(plyr)
-library(dplyr)
+
+
+labs.number_of_rows <- nrow(lab)
 
 gender.frequency <- plyr::count(lab, "gender")
 
+
+lab %>%
+  filter(!is.na(gender)) %>%
+  group_by(gender) %>%
+  summarise(n = n()) %>%
+  mutate(freq = (n / sum(n))*100 ) 
+#%>%
+#  mutate(naFreq = (n/labs.number_of_rows*100))  
+
+lab %>%
+  filter(is.na(gender)) %>%
+  group_by(gender) %>%
+  summarise(n = n()) %>%
+  mutate(freq = (n / labs.number_of_rows)*100 )
+
+
+lab %>%
+  group_by(gender) %>%
+  summarise(nonna = sum(!is.na(gender))) %>%
+  mutate(nonaFreq = n / sum(nonna) )         
+         
+
+lab %>%
+  group_by(gender) %>%
+  summarise(n = n()) %>%
+  #summarise(nonNAGenderCount = sum(!is.na(gender)) %>%
+  mutate(freq = n / sum(n)) 
+#%>%
+#mutate(noNAfreq = n/sum(nonNAGenderCount))
+
+         
 
 arrange(lab, gender)
 
