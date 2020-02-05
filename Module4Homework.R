@@ -37,8 +37,11 @@ lab=read.csv("Binge_Drinking.csv")
 ######### CONVERT CHARACTER COLUMNS INTO FACTORS ###############
 
 lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
+lab <- lab %>% mutate(class = ifelse(is.na(class) == TRUE, 99, class))
+
+
 lab$gender <- factor(lab$gender,labels=c("Male", "Female", "Missing or Unknown"))
-lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher"))
+lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher", "Missing or Unknown"))
 lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
 lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
                                            "Six to Nine Binges", "Ten or More Binges"), ordered=TRUE)
@@ -52,46 +55,32 @@ labs.number_of_rows <- nrow(lab)
 
 #gender.frequency <- plyr::count(lab, "gender")
 
-labDF <- as.data.frame(
+labGender <- as.data.frame(
   lab %>%
     group_by(gender) %>%
     summarise(n = n()) %>%
     mutate(FreqPct = (n/labs.number_of_rows)*100 )
 )
 
-is.num <- sapply(labDF, is.numeric)
-labDF[is.num] <- lapply(labDF[is.num], round, 2)
+is.num <- sapply(labGender, is.numeric)
+labGender[is.num] <- lapply(labGender[is.num], round, 2)
 
-print(labDF)
+print(labGender)
+
+################
+
+labClass <- as.data.frame(
+  lab %>%
+    group_by(class) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+)
+
+is.num <- sapply(labClass, is.numeric)
+labClass[is.num] <- lapply(labClass[is.num], round, 2)
+
+print(labClass)
 
 
 
 
-arrange(lab, gender)
-
-
-
-# change "1/2" to "Male/Female"
-#lab$gender = gsub(1, "Male",   lab$gender)
-#lab$gender = gsub(2, "Female", lab$gender)
-
-# change college class numbers to words
-lab$class = gsub(1, "Freshman", lab$class)
-lab$class = gsub(2, "Sophomore", lab$class)
-lab$class = gsub(3, "Junior", lab$class)
-lab$class = gsub(4, "Senior", lab$class)
-lab$class = gsub(5, "5th year or Higher", lab$class)
-
-lab$fratsoro = gsub(1, "Frat/Sorority Member", lab$fratsoro)
-lab$fratsoro = gsub(2, "Not a Frat/Sorority Member", lab$fratsoro)
-
---# of drinking binges over the last two weeks
-lab$drinks5 = ifelse(is.na(lab$drinks5), -1, lab$drinks5)
-lab$drinks5 = gsub(1, "Zero binges", lab$drinks5)
-lab$drinks5 = gsub(2, "One Binge", lab$drinks5)
-lab$drinks5 = gsub(3, "Two Binges", lab$drinks5)
-lab$drinks5 = gsub(4, "Three to Five Binges", lab$drinks5)
-lab$drinks5 = gsub(5, "Six to Nine Binges", lab$drinks5)
-lab$drinks5 = gsub(6, "Ten or More Binges", lab$drinks5)
-
-sapply(lab, class)
