@@ -53,19 +53,19 @@ labs.number_of_rows <- nrow(lab)
 #gender.frequency <- plyr::count(lab, "gender")
 
 labDF <- as.data.frame(
-
-lab %>%
-  #filter(!is.na(gender)) %>%
-  group_by(gender) %>%
-  summarise(n = n()) %>%
-  #mutate(freq = ((n / (labs.number_of_rows - labs.missing_genders) *100 ) ) ) %>%
-  mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  lab %>%
+    group_by(gender) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
 )
 
 is.num <- sapply(labDF, is.numeric)
 labDF[is.num] <- lapply(labDF[is.num], round, 2)
 
 print(labDF)
+
+
+
 
 arrange(lab, gender)
 
