@@ -37,8 +37,6 @@ lab=read.csv("Binge_Drinking.csv")
 ######### CONVERT CHARACTER COLUMNS INTO FACTORS ###############
 
 lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
-
-
 lab$gender <- factor(lab$gender,labels=c("Male", "Female", "Missing or Unknown"))
 lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher"))
 lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
@@ -46,44 +44,28 @@ lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Bing
                                            "Six to Nine Binges", "Ten or More Binges"), ordered=TRUE)
 
 ################# FREQUENCY TABLES ######################
-library(plyr)
+#library(plyr)
 
 
 labs.number_of_rows <- nrow(lab)
+#labs.missing_genders <- sum(lab$gender == "Missing or Unknown")
 
-gender.frequency <- plyr::count(lab, "gender")
+#gender.frequency <- plyr::count(lab, "gender")
 
+labDF <- as.data.frame(
 
 lab %>%
-  filter(!is.na(gender)) %>%
+  #filter(!is.na(gender)) %>%
   group_by(gender) %>%
   summarise(n = n()) %>%
-  mutate(freq = (n / sum(n))*100 ) 
-#%>%
-#  mutate(naFreq = (n/labs.number_of_rows*100))  
+  #mutate(freq = ((n / (labs.number_of_rows - labs.missing_genders) *100 ) ) ) %>%
+  mutate(FreqPct = (n/labs.number_of_rows)*100 )
+)
 
-lab %>%
-  filter(is.na(gender)) %>%
-  group_by(gender) %>%
-  summarise(n = n()) %>%
-  mutate(freq = (n / labs.number_of_rows)*100 )
+is.num <- sapply(labDF, is.numeric)
+labDF[is.num] <- lapply(labDF[is.num], round, 2)
 
-
-lab %>%
-  group_by(gender) %>%
-  summarise(nonna = sum(!is.na(gender))) %>%
-  mutate(nonaFreq = n / sum(nonna) )         
-         
-
-lab %>%
-  group_by(gender) %>%
-  summarise(n = n()) %>%
-  #summarise(nonNAGenderCount = sum(!is.na(gender)) %>%
-  mutate(freq = n / sum(n)) 
-#%>%
-#mutate(noNAfreq = n/sum(nonNAGenderCount))
-
-         
+print(labDF)
 
 arrange(lab, gender)
 
