@@ -23,6 +23,11 @@
 #  https://stackoverflow.com/questions/24576515/relative-frequencies-proportions-with-dplyr
 #  using filter to remove NA when doing a frequency
 #  https://forcats.tidyverse.org/
+#  using table()
+#  https://www.r-bloggers.com/r-function-of-the-day-table/
+#  Charts
+#  https://www.r-graph-gallery.com/48-grouped-barplot-with-ggplot2.html
+
 
 #library(tidyverse)
 
@@ -38,16 +43,23 @@ lab=read.csv("Binge_Drinking.csv")
 
 lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
 lab <- lab %>% mutate(class = ifelse(is.na(class) == TRUE, 99, class))
+lab <- lab %>% mutate(fratsoro = ifelse(is.na(fratsoro) == TRUE, 99, fratsoro))
+lab <- lab %>% mutate(drinks5 = ifelse(is.na(drinks5) == TRUE, 99, drinks5))
+
+
 
 
 lab$gender <- factor(lab$gender,labels=c("Male", "Female", "Missing or Unknown"))
 lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher", "Missing or Unknown"))
-lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member"))
+lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member", "Missing or Unknown"))
 lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
-                                           "Six to Nine Binges", "Ten or More Binges"), ordered=TRUE)
+                                           "Six to Nine Binges", "Ten or More Binges", "Missing or Unknown"), ordered=TRUE)
 
+
+head(lab)
 ################# FREQUENCY TABLES ######################
 #library(plyr)
+library(ggplot2)
 
 
 labs.number_of_rows <- nrow(lab)
@@ -67,6 +79,16 @@ labGender[is.num] <- lapply(labGender[is.num], round, 2)
 
 print(labGender)
 
+table(lab$gender, lab$class)
+
+barplot(table(lab$gender, lab$class))
+
+barplot(table(lab$gender))
+
+ggplot(lab, aes(fill=age, y=gender, x=class)) #+ 
+#  geom_bar(position="dodge", stat="identity")
+
+#margin.table(as.array  (  labGender$n),1)
 ################
 
 labClass <- as.data.frame(
@@ -82,5 +104,32 @@ labClass[is.num] <- lapply(labClass[is.num], round, 2)
 print(labClass)
 
 
+################
+
+labFratSoro <- as.data.frame(
+  lab %>%
+    group_by(fratsoro) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+)
+
+is.num <- sapply(labFratSoro, is.numeric)
+labFratSoro[is.num] <- lapply(labFratSoro[is.num], round, 2)
+
+print(labFratSoro)
+
+################
+
+labdrinks5 <- as.data.frame(
+  lab %>%
+    group_by(drinks5) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+)
+
+is.num <- sapply(labdrinks5, is.numeric)
+labdrinks5[is.num] <- lapply(labdrinks5[is.num], round, 2)
+
+print(labdrinks5)
 
 
