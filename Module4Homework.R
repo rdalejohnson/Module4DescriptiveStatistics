@@ -100,7 +100,7 @@ structable(~gender + drinks5+class, data=lab)
 mosaic(~gender + drinks5 + class  ,
           data=lab, direction=c("h", "v", "h"))
 
-(fill_colors <- matrix(c("dark cyan","gray","gray","dark magenta"), ncol = 2))
+(fill_colors <- matrix(c("dark cyan","gray","violet","dark magenta"), ncol = 2))
 
 mosaic(~gender + drinks5 + class,
        data=lab, direction=c("h", "v", "h"),
