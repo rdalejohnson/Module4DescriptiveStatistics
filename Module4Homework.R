@@ -60,10 +60,14 @@ head(lab)
 ################# FREQUENCY TABLES ######################
 #library(plyr)
 library(ggplot2)
+library(vcd)
+library(gmodels)
 
 
 labs.number_of_rows <- nrow(lab)
 #labs.missing_genders <- sum(lab$gender == "Missing or Unknown")
+
+CrossTable(lab$gender, lab$class, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
 
 #gender.frequency <- plyr::count(lab, "gender")
 
@@ -81,12 +85,15 @@ print(labGender)
 
 table(lab$gender, lab$class)
 
-barplot(table(lab$gender, lab$class))
+barplot(table(lab$gender, lab$drinks5))
 
 barplot(table(lab$gender))
 
-ggplot(lab, aes(fill=age, y=gender, x=class)) #+ 
-#  geom_bar(position="dodge", stat="identity")
+ggplot(lab, aes(x=gender)) + 
+  geom_bar(aes(fill = class))+ 
+  geom_bar(aes(fill = fratsoro))
+
+hist(lab$gender)
 
 #margin.table(as.array  (  labGender$n),1)
 ################
