@@ -85,6 +85,11 @@ print(labGender)
 
 table(lab$gender, lab$class)
 
+#highlighting="gender", highlighting_fill = c("#CCEEFF", "#BB00AA")
+
+mosaic(~ gender + drinks5 + class, data=lab, 
+       direction=c("h", "v", "v"))
+
 barplot(table(lab$gender, lab$drinks5))
 
 barplot(table(lab$gender))
