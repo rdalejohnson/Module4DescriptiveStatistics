@@ -27,6 +27,8 @@
 #  https://www.r-bloggers.com/r-function-of-the-day-table/
 #  Charts
 #  https://www.r-graph-gallery.com/48-grouped-barplot-with-ggplot2.html
+#  mosaics by hand
+#  https://www.youtube.com/watch?v=x88vSpqPPjc
 
 
 #library(tidyverse)
@@ -35,6 +37,9 @@ library(dplyr)
   
 # read your file
 lab=read.csv("Binge_Drinking.csv")
+
+original_lab <- lab
+summary(original_lab)
 
 #factor(lab$gender)
 #unique(lab$gender)
@@ -49,11 +54,11 @@ lab <- lab %>% mutate(drinks5 = ifelse(is.na(drinks5) == TRUE, 99, drinks5))
 
 
 
-lab$gender <- factor(lab$gender,labels=c("Male", "Female", "Missing or Unknown"))
-lab$class <- factor(lab$class,labels=c("Freshman", "Sophomore", "Junior", "Senior", "5th Year or Higher", "Missing or Unknown"))
-lab$fratsoro <- factor(lab$fratsoro,labels=c("Frat/Sorority Member", "Not a Frat/Sorority Member", "Missing or Unknown"))
-lab$drinks5 <- factor(lab$drinks5,labels=c("Zero binges", "One Binge", "Two Binges", "Three to Five Binges", 
-                                           "Six to Nine Binges", "Ten or More Binges", "Missing or Unknown"), ordered=TRUE)
+lab$gender <- factor(lab$gender,labels=c("M", "F", "U"))
+lab$class <- factor(lab$class,labels=c("F", "S", "J", "S", "5+", "U"))
+lab$fratsoro <- factor(lab$fratsoro,labels=c("Y", "N", "U"))
+lab$drinks5 <- factor(lab$drinks5,labels=c("None", "1", "2", "3-5", 
+                                           "6-9", "10+", "U"), ordered=TRUE)
 
 
 head(lab)
@@ -87,18 +92,22 @@ table(lab$gender, lab$class)
 
 #highlighting="gender", highlighting_fill = c("#CCEEFF", "#BB00AA")
 
-mosaic(~ gender + drinks5 + class, data=lab, 
-       direction=c("h", "v", "v"))
+#mosaic(~gender + drinks5+fratsoro, data=lab, 
+#       direction=c("h", "v", "h"))
 
-barplot(table(lab$gender, lab$drinks5))
+structable(~gender + drinks5+class, data=lab)
 
-barplot(table(lab$gender))
+mosaic(~gender + drinks5 + class  ,
+          data=lab, direction=c("h", "v", "h"))
 
-ggplot(lab, aes(x=gender)) + 
-  geom_bar(aes(fill = class))+ 
-  geom_bar(aes(fill = fratsoro))
+# barplot(table(lab$gender, lab$drinks5))
+# 
+# barplot(table(lab$gender))
+# 
+# ggplot(lab, aes(x=gender)) + 
+#   geom_bar(aes(fill = class))+ 
+#   geom_bar(aes(fill = fratsoro))
 
-hist(lab$gender)
 
 #margin.table(as.array  (  labGender$n),1)
 ################
