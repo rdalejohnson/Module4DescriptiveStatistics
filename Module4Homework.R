@@ -98,7 +98,7 @@ table(lab$gender, lab$class)
 structable(~fratsoro+ gender + class + drinks5, data=lab)
 
 mosaic(~gender +fratsoro+ drinks5 + class  ,
-          data=lab, direction=c("h", "h", "v", "h"))
+          data=lab, direction=c("h", "v", "h", "h"))
 
 (fill_colors <- matrix(c("dark cyan","gray","violet","dark magenta"), ncol = 2))
 
@@ -108,15 +108,15 @@ mosaic(~gender +fratsoro+ drinks5 + class  ,
 #        gp = gpar(fill = fill_colors, col = 0))
 
 
-mosaic(~  gender + fratsoro + drinks5 +class,
-       data=lab, direction=c("h", "v", "h", "h"),
+mosaic(~  gender + fratsoro + class + drinks5 ,
+       data=lab, direction=c("h", "v", "v", "h"),
        spacing = spacing_increase(),
        gp = gpar(fill = fill_colors, col = 0))
 
 
 
-mosaic(~ fratsoro+ gender + class + drinks5 ,
-       data=lab, direction=c("h", "v", "h", "v"),
+mosaic(~ gender + fratsoro + class ,
+       data=lab, direction=c("h", "v", "v"),
       
        spacing = spacing_increase(),
        gp = gpar(fill = fill_colors, col = 0))
