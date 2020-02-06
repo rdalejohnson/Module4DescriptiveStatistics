@@ -54,8 +54,8 @@ lab <- lab %>% mutate(drinks5 = ifelse(is.na(drinks5) == TRUE, 99, drinks5))
 
 
 
-lab$gender <- factor(lab$gender,labels=c("M", "F", "U"))
-lab$class <- factor(lab$class,labels=c("F", "S", "J", "S", "5+", "U"))
+lab$gender <- factor(lab$gender,labels=c("Male", "Female", "U"))
+lab$class <- factor(lab$class,labels=c("Fr", "So", "Jr", "Sn", "5+", "U"))
 lab$fratsoro <- factor(lab$fratsoro,labels=c("Y", "N", "U"))
 lab$drinks5 <- factor(lab$drinks5,labels=c("None", "1", "2", "3-5", 
                                            "6-9", "10+", "U"), ordered=TRUE)
@@ -95,15 +95,29 @@ table(lab$gender, lab$class)
 #mosaic(~gender + drinks5+fratsoro, data=lab, 
 #       direction=c("h", "v", "h"))
 
-structable(~gender + drinks5+class, data=lab)
+structable(~fratsoro+ gender + class + drinks5, data=lab)
 
-mosaic(~gender + drinks5 + class  ,
-          data=lab, direction=c("h", "v", "h"))
+mosaic(~gender +fratsoro+ drinks5 + class  ,
+          data=lab, direction=c("h", "h", "v", "h"))
 
 (fill_colors <- matrix(c("dark cyan","gray","violet","dark magenta"), ncol = 2))
 
-mosaic(~gender + drinks5 + class,
-       data=lab, direction=c("h", "v", "h"),
+# mosaic(~  gender  ,
+#        data=lab, direction=c("h"),
+#        spacing = spacing_increase(),
+#        gp = gpar(fill = fill_colors, col = 0))
+
+
+mosaic(~  gender + fratsoro + drinks5 +class,
+       data=lab, direction=c("h", "v", "h", "h"),
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
+
+mosaic(~ fratsoro+ gender + class + drinks5 ,
+       data=lab, direction=c("h", "v", "h", "v"),
+      
        spacing = spacing_increase(),
        gp = gpar(fill = fill_colors, col = 0))
 
