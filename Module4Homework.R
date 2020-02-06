@@ -100,6 +100,15 @@ structable(~gender + drinks5+class, data=lab)
 mosaic(~gender + drinks5 + class  ,
           data=lab, direction=c("h", "v", "h"))
 
+(fill_colors <- matrix(c("dark cyan","gray","gray","dark magenta"), ncol = 2))
+
+mosaic(~gender + drinks5 + class,
+       data=lab, direction=c("h", "v", "h"),
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+       #labeling = labeling_list, margins = c(bottom = 5))
+
 # barplot(table(lab$gender, lab$drinks5))
 # 
 # barplot(table(lab$gender))
