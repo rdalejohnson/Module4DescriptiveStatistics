@@ -82,12 +82,16 @@ names(lab)[names(lab) == "livewith"] <- "Greek_House"
 
 structable(~Greek_House + Drinking_Binges, data=lab)
 
+#fontsize idea from https://stat.ethz.ch/pipermail/r-help/2007-September/141170.html
 
 mosaic(~   Greek_House + Drinking_Binges , 
        data=lab, direction=c("h", "v"),
        zero_size=0,
        spacing = spacing_increase(),
-       gp = gpar(fill = fill_colors, col = 0))
+       gp = gpar(fill = fill_colors, col = 0),
+       labeling_args=list(rot_labels=c(left=0,top=90),gp_labels=(gpar(fontsize=8)),
+       offset_varnames = c(top = 1), offset_labels = c(left = 0.3, top=0.3))
+      )
 
 
 
