@@ -95,7 +95,14 @@ table(lab$gender, lab$class)
 #mosaic(~gender + drinks5+fratsoro, data=lab, 
 #       direction=c("h", "v", "h"))
 
-structable(~fratsoro+ gender + class + drinks5, data=lab)
+structedlabs <- structable(~fratsoro+ gender + class + drinks5, data=lab, 
+                           spacing = spacing_increase(start = 1, rate = 2.5), na.rm=TRUE)
+
+structedlabs
+
+mosaic(structedlabs)
+
+strucplot(structedlabs)
 
 mosaic(~gender +fratsoro+ drinks5 + class  ,
           data=lab, direction=c("h", "v", "h", "h"))
@@ -115,7 +122,7 @@ mosaic(~  gender + fratsoro + class + drinks5 ,
 
 
 
-mosaic(~ gender + fratsoro + class ,
+mosaic(~ gender + fratsoro + class , zero_size = 0,
        data=lab, direction=c("h", "v", "v"),
       
        spacing = spacing_increase(),
