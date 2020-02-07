@@ -68,6 +68,10 @@ summary(lab)
 
 head(lab)
 
+CrossTable(lab$gender, lab$class, lab$drinks5, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
+
+xtabs(~gender + class + Drinking_Binges, data=lab)
+
 
 ################################################################################
 #### ANALYSIS OF HYPOTHESIS 1: 
