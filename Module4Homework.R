@@ -50,18 +50,50 @@ lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
 lab <- lab %>% mutate(class = ifelse(is.na(class) == TRUE, 99, class))
 lab <- lab %>% mutate(fratsoro = ifelse(is.na(fratsoro) == TRUE, 99, fratsoro))
 lab <- lab %>% mutate(drinks5 = ifelse(is.na(drinks5) == TRUE, 99, drinks5))
-
-
+lab <- lab %>% mutate(livewith = ifelse(is.na(livewith) == TRUE, 99, livewith))
 
 
 lab$gender <- factor(lab$gender,labels=c("Male", "Female", "U"))
 lab$class <- factor(lab$class,labels=c("Fr", "So", "Jr", "Sn", "5+", "U"))
-lab$fratsoro <- factor(lab$fratsoro,labels=c("Y", "N", "U"))
+#lab$fratsoro <- factor(lab$fratsoro,labels=c("N", "Y", "U"))
 lab$drinks5 <- factor(lab$drinks5,labels=c("None", "1", "2", "3-5", 
                                            "6-9", "10+", "U"), ordered=TRUE)
+lab$livewith <- factor(lab$livewith,labels=c("N", "Y", "U"), ordered=TRUE)
 
+summary(lab)
 
 head(lab)
+
+
+################################################################################
+#### ANALYSIS OF HYPOTHESIS 1: 
+####  Students who live at a frat/sorority house will report higher binge drinking
+####  compared to students who reside elsewhere
+
+
+
+
+#labs2 <- subset(x=lab, subset=(gender == "Female" )  )
+names(lab)[names(lab) == "drinks5"] <- "Drinking_Binges"
+names(lab)[names(lab) == "fratsoro"] <- "Greek_Member"
+names(lab)[names(lab) == "drinkprob"] <- "Drinking_Problem"
+names(lab)[names(lab) == "livewith"] <- "Greek_House"
+
+
+structable(~Greek_House + Drinking_Binges, data=lab)
+
+
+mosaic(~   Greek_House + Drinking_Binges , 
+       data=lab, direction=c("h", "v"),
+       zero_size=0,
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
+
+
+
+
 ################# FREQUENCY TABLES ######################
 #library(plyr)
 library(ggplot2)
@@ -175,5 +207,75 @@ is.num <- sapply(labdrinks5, is.numeric)
 labdrinks5[is.num] <- lapply(labdrinks5[is.num], round, 2)
 
 print(labdrinks5)
+
+
+
+
+#############################
+
+
+#labs2 <- subset(x=lab, subset=(gender == "Female" )  )
+names(lab)[names(lab) == "drinks5"] <- "Drinking_Binges"
+names(lab)[names(lab) == "fratsoro"] <- "Greek_Member"
+names(lab)[names(lab) == "drinkprob"] <- "Drinking_Problem"
+names(lab)[names(lab) == "livewith"] <- "Greek_House"
+
+
+structable(~Greek_House + Drinking_Binges, data=lab)
+
+
+
+
+
+###################################
+
+femaleOnlyDF <- subset(x=lab, subset=(gender == "Female" )  )
+names(femaleOnlyDF)[names(femaleOnlyDF) == "drinks5"] <- "Drinking_Binges"
+names(femaleOnlyDF)[names(femaleOnlyDF) == "fratsoro"] <- "Greek_Member"
+names(femaleOnlyDF)[names(femaleOnlyDF) == "drinkprob"] <- "Drinking_Problem"
+names(femaleOnlyDF)[names(femaleOnlyDF) == "livewith"] <- "Greek_House"
+
+
+
+
+
+
+femaleCrossTab <- structable(~Drinking_Binges+Greek_House, data=femaleOnlyDF)
+
+
+
+mosaic(~  Drinking_Binges + Greek_House,
+       zero_size=0,
+       data=femaleCrossTab, direction=c("h", "v"),
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
+mosaic(~   Greek_House + Drinking_Binges , 
+       data=femaleCrossTab, direction=c("h", "v"),
+       zero_size=0,
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
+
+femaleCrossTab2 <- structable(~Drinking_Problem+Greek_Member+class, data=femaleOnlyDF)
+
+
+
+mosaic(~  Drinking_Problem + Greek_Member,
+       zero_size=0,
+       data=femaleCrossTab2, direction=c("h", "v"),
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
+mosaic(~   Greek_Member + Drinking_Problem , 
+       data=femaleCrossTab2, direction=c("h", "v"),
+       zero_size=0,
+       spacing = spacing_increase(),
+       gp = gpar(fill = fill_colors, col = 0))
+
+
 
 
