@@ -34,6 +34,10 @@
 #library(tidyverse)
 
 library(dplyr)
+library(ggplot2)
+library(vcd)
+library(gmodels)
+
   
 # read your file
 lab=read.csv("Binge_Drinking.csv")
@@ -82,6 +86,26 @@ names(lab)[names(lab) == "livewith"] <- "Greek_House"
 
 structable(~Greek_House + Drinking_Binges, data=lab)
 
+xtabs(~Greek_House + Drinking_Binges, data=lab)
+
+library(gmodels)
+CrossTable(lab$Greek_House, lab$Drinking_Binges, dnn = c("Lives in Greek House", "# Drinking Binges"),
+             prop.chisq = FALSE, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
+
+niceXData = as.data.frame (
+  CrossTable(lab$Greek_House, lab$Drinking_Binges, dnn = c("Lives in Greek House", "# Drinking Binges"),
+             prop.chisq = FALSE, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
+)
+
+
+niceXData = as.data.frame(  CrossTable(lab$Drinking_Binges, lab$Greek_House, dnn = c("# Drinking Binges", "Lives in Greek House"),
+           prop.chisq = FALSE, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
+)
+
+
+(fill_colors <- matrix(c("dark cyan","gray","violet","dark magenta"), ncol = 2))
+
+
 #fontsize idea from https://stat.ethz.ch/pipermail/r-help/2007-September/141170.html
 
 mosaic(~   Greek_House + Drinking_Binges , 
@@ -90,7 +114,8 @@ mosaic(~   Greek_House + Drinking_Binges ,
        spacing = spacing_increase(),
        gp = gpar(fill = fill_colors, col = 0),
        labeling_args=list(rot_labels=c(left=0,top=90),gp_labels=(gpar(fontsize=8)),
-       offset_varnames = c(top = 1), offset_labels = c(left = 0.3, top=0.3))
+      # offset_varnames = c(top = 1), 
+       offset_labels = c(left = 0.3, top=0.3))
       )
 
 
@@ -100,9 +125,6 @@ mosaic(~   Greek_House + Drinking_Binges ,
 
 ################# FREQUENCY TABLES ######################
 #library(plyr)
-library(ggplot2)
-library(vcd)
-library(gmodels)
 
 
 labs.number_of_rows <- nrow(lab)
@@ -143,7 +165,6 @@ strucplot(structedlabs)
 mosaic(~gender +fratsoro+ drinks5 + class  ,
           data=lab, direction=c("h", "v", "h", "h"))
 
-(fill_colors <- matrix(c("dark cyan","gray","violet","dark magenta"), ncol = 2))
 
 # mosaic(~  gender  ,
 #        data=lab, direction=c("h"),
