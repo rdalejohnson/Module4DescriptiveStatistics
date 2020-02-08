@@ -88,6 +88,46 @@ names(lab)[names(lab) == "drinkprob"] <- "Drinking_Problem"
 names(lab)[names(lab) == "livewith"] <- "Greek_House"
 
 
+lab.crosstab.greek.binges = table(lab$Greek_House, lab$Drinking_Binges)
+
+#The dimension for this table are
+# 1 = greek house residency (Y/N)
+# 2 = drinking binges
+lab.crosstab.greek.binges
+
+# ask for totals by dimension 1, which is greek house residency;  
+#Should add up to 1400 since nothing is being exluded
+margin.table(lab.crosstab.greek.binges, 1)
+
+#ask for totals by dimension2, whichis binges
+#Should add up to 1400 since nothing is being exluded
+margin.table(lab.crosstab.greek.binges, 2)
+
+#Compute the PROPORTION(percentage) for every cell in the lab.crosstab.greek.binges
+#In this case, the percentages in all the cells in the entire table will be rounded to 2 decimal places
+#and if you add up all the values in all the cells, you'll get 100%
+round(prop.table(lab.crosstab.greek.binges), 2)
+
+
+testingdf = as.data.frame(round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2))
+
+
+round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2)
+round(prop.table(lab.crosstab.greek.binges, margin=2), digits=2)
+
+
+# https://www.r-bloggers.com/how-to-convert-contingency-tables-to-data-frames-with-r/
+
+
+dataFrameCrosstab <- as.data.frame.matrix(lab.crosstab.greek.binges)
+
+
+
+###################
+
+
+
+
 structable(~Greek_House + Drinking_Binges, data=lab)
 
 xtabs(~Greek_House + Drinking_Binges, data=lab)
