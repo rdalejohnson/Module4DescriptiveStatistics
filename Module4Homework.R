@@ -45,6 +45,18 @@ lab=read.csv("Binge_Drinking.csv")
 original_lab <- lab
 summary(original_lab)
 
+labs.number_of_rows <- nrow(lab)
+
+
+table2 <- table(lab$gender)
+
+table2
+prop.table(table2)
+
+print(table2)
+print(as.data.frame(table2))
+
+
 #factor(lab$gender)
 #unique(lab$gender)
 
@@ -68,7 +80,7 @@ summary(lab)
 
 head(lab)
 
-CrossTable(lab$gender, lab$class, lab$drinks5, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
+CrossTable(lab$gender, lab$class, prop.t=TRUE, prop.r=TRUE, prop.c=TRUE)
 
 xtabs(~gender + class + Drinking_Binges, data=lab)
 
@@ -121,7 +133,208 @@ round(prop.table(lab.crosstab.greek.binges, margin=2), digits=2)
 
 dataFrameCrosstab <- as.data.frame.matrix(lab.crosstab.greek.binges)
 
+#counts and frequencies (proportions)
+########       GENDER     ########################
+table(lab$gender)
+prop.table(table(lab$gender))
 
+#All in one version using dplyr
+labGender <- as.data.frame(
+  lab %>%
+    group_by(gender) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+    
+)
+
+is.num <- sapply(labGender, is.numeric)
+labGender[is.num] <- lapply(labGender[is.num], round, 2)
+
+labGender
+
+
+#########  CLASS/YEAR IN COLLEGE ############
+table(lab$class)
+prop.table(table(lab$class))
+
+#All in one version using dplyr
+labClass <- as.data.frame(
+  lab %>%
+    group_by(class) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  
+)
+
+
+is.num <- sapply(labClass, is.numeric)
+labClass[is.num] <- lapply(labClass[is.num], round, 2)
+
+labClass
+
+#########  GREEK MEMBERSHIP IN COLLEGE ############
+table(lab$Greek_Member)
+prop.table(table(lab$Greek_Member))
+
+#All in one version using dplyr
+labGreekMembers <- as.data.frame(
+  lab %>%
+    group_by(Greek_Member) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  
+)
+
+
+is.num <- sapply(labGreekMembers, is.numeric)
+labGreekMembers[is.num] <- lapply(labGreekMembers[is.num], round, 2)
+
+labGreekMembers
+
+
+
+#########  BINGE DRINKING  ############
+table(lab$Drinking_Binges)
+prop.table(table(lab$Drinking_Binges))
+
+#All in one version using dplyr
+labBinges <- as.data.frame(
+  lab %>%
+    group_by(Drinking_Binges) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  
+)
+
+
+is.num <- sapply(labBinges, is.numeric)
+labBinges[is.num] <- lapply(labBinges[is.num], round, 2)
+
+labBinges
+
+
+
+
+#########  LIVES at GREEKHOUSE   ############
+table(lab$Greek_House)
+prop.table(table(lab$Greek_House))
+
+#All in one version using dplyr
+labLivesAtGreekHouse <- as.data.frame(
+  lab %>%
+    group_by(Greek_House) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  
+)
+
+labLivesAtGreekHouse <- as.data.frame(
+  original_lab %>%
+    group_by(livewith) %>%
+    summarise(n = n()) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100 )
+  
+)
+
+
+is.num <- sapply(labLivesAtGreekHouse, is.numeric)
+labLivesAtGreekHouse[is.num] <- lapply(labLivesAtGreekHouse[is.num], round, 2)
+
+labLivesAtGreekHouse
+
+######## AGE ################
+
+
+labAge <- as.data.frame(
+  lab %>%
+    group_by(age) %>%
+    summarise(
+        n = n()    ) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100)
+)
+
+summary(labAge$age)
+
+#standard deviation
+sd(lab$age, na.rm=TRUE)
+
+
+var(lab$age, na.rm=TRUE)
+
+
+fivenum(labAge$age)
+
+##############################
+
+###Drinking_Problem
+
+table(lab$Drinking_Problem)
+prop.table(table(lab$Drinking_Problem))
+
+fivenum(lab$Drinking_Problem)
+
+labDrinking_Problem <- as.data.frame(
+  lab %>%
+    group_by(Drinking_Problem) %>%
+    summarise(
+      n = n()    ) %>%
+    mutate(FreqPct = (n/labs.number_of_rows)*100)
+)
+labDrinking_Problem
+
+summary(lab$Drinking_Problem)
+
+#standard deviation
+sd(lab$Drinking_Problem, na.rm=TRUE)
+
+
+var(lab$Drinking_Problem, na.rm=TRUE)
+
+quantile(lab$Drinking_Problem, na.rm=TRUE)
+IQR(lab$Drinking_Problem, na.rm=TRUE)
+
+boxplot(lab$Drinking_Problem, horizontal=TRUE)
+
+summary(lab$Drinking_Problem)
+# https://stackoverflow.com/questions/12866189/calculating-the-outliers-in-r
+
+lab$Drinking_Problem_Cats<-cut(lab$Drinking_Problem, 
+                       breaks=c(-Inf,4.5, 24.5, +Inf), 
+                       labels=c("Lower Outliers", "Withing 25 and 75 percentile", "Upper Outliers"), right=FALSE)
+lab$Drinking_Problem_Cats
+summary(lab$Drinking_Problem_Cats)
+
+###################################
+
+structedlabs <- structable(~Greek_House+ Drinking_Binges, data=lab, 
+                           spacing = spacing_increase(start = 1, rate = 2.5), na.rm=TRUE)
+
+structedlabs
+
+dataFrameCrosstab <- as.data.frame.matrix(structedlabs)
+
+dataFrameCrosstab
+
+print(structedlabs)
+
+structedlabs
+
+
+
+plot_data <- lab %>% 
+  group_by(Greek_House, Drinking_Binges) %>% 
+  tally %>% 
+  mutate(percent = round(n/sum(n)*100, 2) )
+
+plot_data
+
+# ggplot(plot_data, aes(x = Drinking_Binges, y = percent)) +
+#   geom_bar(stat = "identity") +
+#   geom_text(aes(label = percent(percent)), vjust = -0.5) +
+#   labs(title = "Title", y = "percent", x = "Greek House") +
+#   scale_y_continuous(labels = percent, limits = c(0,1)) +
+#   scale_x_discrete(labels = function(x) str_wrap(x, 10)) +
+#   facet_wrap(~Greek_House) 
 
 ###################
 
