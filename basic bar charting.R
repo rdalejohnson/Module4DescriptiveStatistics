@@ -55,13 +55,80 @@ ggplot(lab) +
 ggplot(lab) +
   geom_bar(aes(x = has.a.drinking.problem), color='black', fill='salmon')
 
-########### THE ONE TO USE #############
+########### THE ONES TO USE #############
 #telling ggplot to map the data in the binge column to the fill aesthetic (where someone lives)
+
+####STACKED
+
 ggplot(lab) +
   geom_bar(aes(x = binge.drinking, fill=where.the.respondent.lives))
 
+###SIDE_BY_SIDE
 ggplot(lab) + 
   geom_bar(aes(x=binge.drinking, fill=where.the.respondent.lives), position=position_dodge(preserve = 'single'))
+
+
+
+
+GreekLiving <- lab[(lab$where.the.respondent.lives != "Lives Other" &
+                    lab$where.the.respondent.lives != "" & 
+                    !is.na(lab$where.the.respondent.lives)), ]
+
+
+NOT.GreekLiving <- lab[(lab$where.the.respondent.lives == "Lives Other" &
+                      lab$where.the.respondent.lives != "" & 
+                      !is.na(lab$where.the.respondent.lives)), ] 
+
+ggplot(GreekLiving) + 
+  geom_bar(aes(x=binge.drinking), position=position_dodge(preserve = 'single'))
+
+
+ggplot(NOT.GreekLiving) + 
+  geom_bar(aes(x=binge.drinking), position=position_dodge(preserve = 'single'))
+
+
+lab.crosstab.greek.binges = table(GreekLiving$where.the.respondent.lives, GreekLiving$binge.drinking)
+
+lab.crosstab.NOTgreek.binges = table(NOT.GreekLiving$where.the.respondent.lives, NOT.GreekLiving$binge.drinking)
+
+
+#The dimension for this table are
+# 1 = greek house residency (Y/N)
+# 2 = drinking binges
+lab.crosstab.greek.binges
+
+lab.crosstab.NOTgreek.binges
+
+
+# ask for totals by dimension 1, which is greek house residency;  
+#Should add up to 1400 since nothing is being exluded
+margin.table(lab.crosstab.NOTgreek.binges, 1)
+
+#ask for totals by dimension2, whichis binges
+#Should add up to 1400 since nothing is being exluded
+margin.table(lab.crosstab.NOTgreek.binges, 2)
+
+#Compute the PROPORTION(percentage) for every cell in the lab.crosstab.greek.binges
+#In this case, the percentages in all the cells in the entire table will be rounded to 2 decimal places
+#and if you add up all the values in all the cells, you'll get 100%
+round(prop.table(lab.crosstab.NOTgreek.binges), 2)
+
+
+# testingdf = as.data.frame(round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2))
+# 
+# 
+# round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2)
+# round(prop.table(lab.crosstab.greek.binges, margin=2), digits=2)
+
+
+
+
+
+
+
+
+
+
 
 
 grp.by.binge <- lab %>% group_by(binge.drinking) %>% summarise(age_groups = mean(age.in.years))
