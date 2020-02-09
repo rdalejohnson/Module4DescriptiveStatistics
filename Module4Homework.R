@@ -304,6 +304,25 @@ lab$Drinking_Problem_Cats<-cut(lab$Drinking_Problem,
 lab$Drinking_Problem_Cats
 summary(lab$Drinking_Problem_Cats)
 
+
+########### BAR CHARTS ##############
+
+head(original_lab)
+ggplot(original_lab, aes(x=drinks5, fill=livewith)) +
+  geom_bar(stat="count", position="dodge", colour="black")+
+  geom_text(aes(label=..count..),stat="count", position = position_dodge(width=0.8), vjust=-0.2
+  )
+
+lab = subset(lab, !is.na(lab$Drinking_Binges) & lab$Drinking_Binges != "U")
+lab = subset(lab, !is.na(lab$Greek_House) & lab$Greek_House != "U")
+
+ggplot(lab, aes(x=Drinking_Binges, fill=Greek_House)) +
+  geom_bar(stat="count", position="dodge", colour="black")+
+  geom_text(aes(label=..count..),stat="count", position = position_dodge(width=0.8), vjust=-0.2
+  )
+
+sortedLab <- lab %>% arrange(desc(Greek_House)) %>% arrange(Drinking_Binges)
+
 ###################################
 
 structedlabs <- structable(~Greek_House+ Drinking_Binges, data=lab, 
@@ -322,19 +341,29 @@ structedlabs
 
 
 plot_data <- lab %>% 
-  group_by(Greek_House, Drinking_Binges) %>% 
-  tally %>% 
+  group_by(Drinking_Binges, Greek_House, ) %>% 
+  #tally %>% 
+  summarise(
+    n = n()    )
   mutate(percent = round(n/sum(n)*100, 2) )
 
 plot_data
 
-# ggplot(plot_data, aes(x = Drinking_Binges, y = percent)) +
-#   geom_bar(stat = "identity") +
-#   geom_text(aes(label = percent(percent)), vjust = -0.5) +
-#   labs(title = "Title", y = "percent", x = "Greek House") +
-#   scale_y_continuous(labels = percent, limits = c(0,1)) +
-#   scale_x_discrete(labels = function(x) str_wrap(x, 10)) +
-#   facet_wrap(~Greek_House) 
+
+lab = subset(lab, !is.na(lab$Drinking_Binges) & lab$Drinking_Binges != "U")
+lab = subset(lab, !is.na(lab$Greek_House) & lab$Greek_House != "U")
+
+ggplot(lab, aes(x=Drinking_Binges, fill=Greek_House)) +
+  geom_bar(stat="count", position="dodge", colour="black")+
+  geom_text(aes(label=..count..),stat="count", position = position_dodge(width=0.8), vjust=-0.2
+            )
+  
+  
+  geom_text(aes(label = percent(percent)), vjust = -0.5) +
+  labs(title = "Title", y = "percent", x = "Greek House") +
+  scale_y_continuous(labels = percent, limits = c(0,1)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, 10)) +
+  facet_wrap(~Greek_House)
 
 ###################
 

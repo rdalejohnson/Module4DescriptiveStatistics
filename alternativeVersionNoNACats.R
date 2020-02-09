@@ -250,7 +250,8 @@ labAge <- as.data.frame(
     group_by(age.in.years) %>%
     summarise(
       n = n()    ) %>%
-    mutate(FreqPct = (n/labs.number_of_rows)*100)
+    mutate(FreqPct = (n/labs.number_of_rows)*100,
+           TOTAL = n)
 )
 
 summary(labAge$age.in.years)
@@ -317,7 +318,7 @@ summary(lab$has.a.drinking.problem)
 
 ###################################
 
-structedlabs <- structable(~Greek_House+ Drinking_Binges, data=lab, 
+structedlabs <- structable(~ binge.drinking + where.the.respondent.lives, data=lab, 
                            spacing = spacing_increase(start = 1, rate = 2.5), na.rm=TRUE)
 
 structedlabs
@@ -330,7 +331,12 @@ print(structedlabs)
 
 structedlabs
 
+binging = as.data.frame(table(lab$binge.drinking[!is.na(lab$binge.drinking)]))
 
+binging <- binging %>% mutate(Var1 = ifelse(is.na(Var1) == TRUE, "Missing Data", Var1))
+
+ggplot(binging, aes(x=Var1, y=frequency(), geom_col(  )  ))
+ggplot(binging, aes(x=Var1)) + geom_col())
 
 plot_data <- lab %>% 
   group_by(Greek_House, Drinking_Binges) %>% 
@@ -346,6 +352,12 @@ plot_data
 #   scale_y_continuous(labels = percent, limits = c(0,1)) +
 #   scale_x_discrete(labels = function(x) str_wrap(x, 10)) +
 #   facet_wrap(~Greek_House) 
+
+
+# labelBinge = c('None', 'Once', 'Twice', '3-5', '6-9', '10+')
+# > bingeCountsGreek = c(10, 10, 12, 13, 2, 1)
+# > bingeCountsOther = c(835, 175, 111, 137, 46, 17)
+# > graphable <- data.frame(labelBinge, bingeCountsOther, bingeCountsGreek)
 
 ###################
 
