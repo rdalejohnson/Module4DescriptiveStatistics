@@ -169,7 +169,7 @@ bp <-
     #col = mypalette,
     axes = TRUE,
     main = "Percent Drinking Binges for Greek and Non-Greek Living",
-    sub = "Population counts: 49 Greek Housed and 1342 Not Greek Housed Students",
+    sub = "Sample counts: 49 Greek-Housed and 1342 Non-Greek-Housed Students",
     ylab = "Percentage of Binging Students within each Living Group",
     xlab = "Number of Drinking Binges Over Last Two Weeks",
     names.arg = namesArg,
