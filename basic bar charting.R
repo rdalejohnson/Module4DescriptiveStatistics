@@ -127,20 +127,72 @@ round(prop.table(lab.crosstab.NOTgreek.binges), 2)
 
 greekNOTBinging = as.data.frame.matrix(round(prop.table(lab.crosstab.NOTgreek.binges), 2))
 
+greekBinging
+greekNOTBinging
 
 data <- as.matrix(data.frame(
-  A = c(0.02, 0.01),
-B = c(0.27, 0.1),
-C = c(0.04, 0.03),
-D = c(0.2, 0.62),
-E = c(0.2, 0.13),
-G = c(0.24, 0.08)))
+          D = c(0.2, 0.62),  # NONE greek, nogreek
+          E = c(0.2, 0.13),  # ONCE greek, nogreek
+          G = c(0.24, 0.08), #TWICE greek, nogreek
+          B = c(0.27, 0.1),  #3-5 TIMES greek, nogreek
+          C = c(0.04, 0.03), #6-9 TIMES greek, nogreek
+          A = c(0.02, 0.01) #10+ TIMES greek, nogreek
+))          
+          
+          
 
-rownames(data) ＜- c("Group 1", "Group 2")
+namesArg <- c("None", "Once", "Twice", "3-5", "6-9", "10 or More")
 
-barplot(data,
-col = c("#1b98e0", "#353436"),
-beside = TRUE)
+#convert all decimal proportions to percentages:
+
+data <- data * 100
+
+
+
+
+
+# X and Y axis limits: http://howtoinr.weebly.com/customize-axis.html
+# Dressing up barplot: https://stats.idre.ucla.edu/r/faq/how-can-i-add-features-or-dimensions-to-my-bar-plot/
+# Colors; http://www.sthda.com/english/wiki/colors-in-r
+# Tick marks and lines across plots: https://stackoverflow.com/questions/3785089/change-the-spacing-of-tick-marks-on-the-axis-of-a-plot
+#   Installed package RColorBrewer
+library(RColorBrewer)
+
+par(mar=c(6,4,4,4))
+
+mypalette<-RColorBrewer::brewer.pal(7,"Pastel2")
+
+
+bp <- 
+  barplot(
+    data,
+    #col = mypalette,
+    axes = TRUE,
+    main = "Percent Drinking Binges for Greek and Non-Greek Living",
+    sub = "Population counts: 49 Greek Housed and 1342 Not Greek Housed Students",
+    ylab = "Percentage of Binging Students within each Living Group",
+    xlab = "Number of Drinking Binges Over Last Two Weeks",
+    names.arg = namesArg,
+    ylim = c( 0 , 100 ),
+    legend = c("Greek Living", "No Greek Living"),
+    col = c("lightcyan1", "lavenderblush"),
+    beside = TRUE,
+    #space = c(0, .2) 
+  )
+
+text(
+    x=bp, 
+    y = data+0.4, 
+    label=paste(round(data, 0), '%', sep=""),
+    cex=1, 
+    pos = 3)
+
+axis(side=2, tck=10, at=c(seq(from=0, to=100, by=20)))
+
+
+
+
+
 
 
 XLabels <- c("10+", "6-9", "3-5", "Once", "Twice", "None")
