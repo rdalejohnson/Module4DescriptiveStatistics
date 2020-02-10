@@ -100,6 +100,18 @@ lab.crosstab.greek.binges
 lab.crosstab.NOTgreek.binges
 
 
+
+margin.table(lab.crosstab.greek.binges, 1)
+
+#ask for totals by dimension2, whichis binges
+#Should add up to 1400 since nothing is being exluded
+margin.table(lab.crosstab.greek.binges, 2)
+
+#Compute the PROPORTION(percentage) for every cell in the lab.crosstab.greek.binges
+#In this case, the percentages in all the cells in the entire table will be rounded to 2 decimal places
+#and if you add up all the values in all the cells, you'll get 100%
+greekBinging = as.data.frame.matrix(round(prop.table(lab.crosstab.greek.binges), 2))
+
 # ask for totals by dimension 1, which is greek house residency;  
 #Should add up to 1400 since nothing is being exluded
 margin.table(lab.crosstab.NOTgreek.binges, 1)
@@ -113,6 +125,53 @@ margin.table(lab.crosstab.NOTgreek.binges, 2)
 #and if you add up all the values in all the cells, you'll get 100%
 round(prop.table(lab.crosstab.NOTgreek.binges), 2)
 
+greekNOTBinging = as.data.frame.matrix(round(prop.table(lab.crosstab.NOTgreek.binges), 2))
+
+
+data <- as.matrix(data.frame(
+  A = c(0.02, 0.01),
+B = c(0.27, 0.1),
+C = c(0.04, 0.03),
+D = c(0.2, 0.62),
+E = c(0.2, 0.13),
+G = c(0.24, 0.08)))
+
+rownames(data) ＜- c("Group 1", "Group 2")
+
+barplot(data,
+col = c("#1b98e0", "#353436"),
+beside = TRUE)
+
+
+XLabels <- c("10+", "6-9", "3-5", "Once", "Twice", "None")
+Greeks <- c(0.02,	0.27,	0.04,	0.2,	0.2,	0.24)
+NonGreeks <- c(0.01,	0.1,	0.03,	0.62,	0.13,	0.08)
+graphable <- data.frame(XLabels, Greeks, NonGreeks)
+
+
+barplot(as.matrix(graphable))
+
+prop.table(table(graphable$Greek, graphable$NonGreeks), 1)
+
+values <-  c(906, 264, 689, 739, 938)
+
+barplot(values)
+
+r111 <- c("10+", 0.02, 0.01)
+graphable <- data.frame(r111)
+
+ggplot(graphable) + 
+  geom_bar(aes(x=XLabels, fill=NonGreeks, position=position_dodge(preserve = 'single')))
+
+
+
+
+X <- rbind(X, Y[3,])
+#selet 
+y<-c(A=5, B=4.25, C=4.5)
+
+#Test that the items in the row match the vector you wanted
+x[1,]==y
 
 # testingdf = as.data.frame(round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2))
 # 
