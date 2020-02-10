@@ -47,6 +47,9 @@ summary(original_lab)
 
 labs.number_of_rows <- nrow(lab)
 
+mean(lab$age.in.years, na.rm=TRUE)
+
+
 
 table2 <- table(lab$gender)
 
@@ -258,6 +261,8 @@ summary(labAge$age.in.years)
 
 #standard deviation
 sd(lab$age.in.years, na.rm=TRUE)
+
+mean(lab$age.in.years, na.rm=TRUE)
 
 
 var(lab$age.in.years, na.rm=TRUE)
