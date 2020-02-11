@@ -187,7 +187,7 @@ text(
     cex=1, 
     pos = 3)
 
-axis(side=2, tck=10, at=c(seq(from=0, to=100, by=20)))
+axis(side=2, tck=20, at=c(seq(from=0, to=100, by=20)))
 
 
 
