@@ -131,12 +131,12 @@ greekBinging
 greekNOTBinging
 
 data <- as.matrix(data.frame(
-          D = c(0.2, 0.62),  # NONE greek, nogreek
-          E = c(0.2, 0.13),  # ONCE greek, nogreek
-          G = c(0.24, 0.08), #TWICE greek, nogreek
-          B = c(0.27, 0.1),  #3-5 TIMES greek, nogreek
-          C = c(0.04, 0.03), #6-9 TIMES greek, nogreek
-          A = c(0.02, 0.01) #10+ TIMES greek, nogreek
+          D = c(20.83, 63.21),  # NONE greek, nogreek
+          E = c(20.83, 13.25),  # ONCE greek, nogreek
+          G = c(25, 8.4), #TWICE greek, nogreek
+          B = c(27.08, 10.37),  #3-5 TIMES greek, nogreek
+          C = c(4.17, 3.48), #6-9 TIMES greek, nogreek
+          A = c(2.08, 1.29) #10+ TIMES greek, nogreek
 ))          
           
           
@@ -145,7 +145,7 @@ namesArg <- c("None", "Once", "Twice", "3-5", "6-9", "10 or More")
 
 #convert all decimal proportions to percentages:
 
-data <- data * 100
+#data <- data * 100
 
 
 
@@ -169,21 +169,20 @@ bp <-
     #col = mypalette,
     axes = TRUE,
     main = "Percent Drinking Binges for Greek and Non-Greek Living",
-    sub = "Sample counts: 49 Greek-Housed and 1342 Non-Greek-Housed Students",
+    sub = "Sample counts: 48 Greek-Housed and 1321 Non-Greek-Housed Students who answered binge question",
     ylab = "Percentage of Binging Students within each Living Group",
     xlab = "Number of Drinking Binges Over Last Two Weeks",
     names.arg = namesArg,
     ylim = c( 0 , 100 ),
     legend = c("Greek Living", "No Greek Living"),
     col = c("lightcyan1", "lavenderblush"),
-    beside = TRUE,
-    #space = c(0, .2) 
+    beside = TRUE
   )
 
 text(
     x=bp, 
     y = data+0.4, 
-    label=paste(round(data, 0), '%', sep=""),
+    label=paste(round(data, 1), '%', sep=""),
     cex=1, 
     pos = 3)
 
@@ -193,43 +192,38 @@ axis(side=2, tck=10, at=c(seq(from=0, to=100, by=20)))
 
 
 
-
-
-XLabels <- c("10+", "6-9", "3-5", "Once", "Twice", "None")
-Greeks <- c(0.02,	0.27,	0.04,	0.2,	0.2,	0.24)
-NonGreeks <- c(0.01,	0.1,	0.03,	0.62,	0.13,	0.08)
-graphable <- data.frame(XLabels, Greeks, NonGreeks)
-
-
-barplot(as.matrix(graphable))
-
-prop.table(table(graphable$Greek, graphable$NonGreeks), 1)
-
-values <-  c(906, 264, 689, 739, 938)
-
-barplot(values)
-
-r111 <- c("10+", 0.02, 0.01)
-graphable <- data.frame(r111)
-
-ggplot(graphable) + 
-  geom_bar(aes(x=XLabels, fill=NonGreeks, position=position_dodge(preserve = 'single')))
-
-
-
-
-X <- rbind(X, Y[3,])
-#selet 
-y<-c(A=5, B=4.25, C=4.5)
-
-#Test that the items in the row match the vector you wanted
-x[1,]==y
-
-# testingdf = as.data.frame(round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2))
 # 
 # 
-# round(prop.table(lab.crosstab.greek.binges, margin=1), digits=2)
-# round(prop.table(lab.crosstab.greek.binges, margin=2), digits=2)
+# XLabels <- c("10+", "6-9", "3-5", "Once", "Twice", "None")
+# Greeks <- c(0.02,	0.27,	0.04,	0.2,	0.2,	0.24)
+# NonGreeks <- c(0.01,	0.1,	0.03,	0.62,	0.13,	0.08)
+# graphable <- data.frame(XLabels, Greeks, NonGreeks)
+# 
+# 
+# barplot(as.matrix(graphable))
+# 
+# prop.table(table(graphable$Greek, graphable$NonGreeks), 1)
+# 
+# values <-  c(906, 264, 689, 739, 938)
+# 
+# barplot(values)
+# 
+# r111 <- c("10+", 0.02, 0.01)
+# graphable <- data.frame(r111)
+# 
+# ggplot(graphable) + 
+#   geom_bar(aes(x=XLabels, fill=NonGreeks, position=position_dodge(preserve = 'single')))
+
+
+
+
+# X <- rbind(X, Y[3,])
+# #selet 
+# y<-c(A=5, B=4.25, C=4.5)
+# 
+# #Test that the items in the row match the vector you wanted
+# x[1,]==y
+# 
 
 
 
@@ -238,42 +232,41 @@ x[1,]==y
 
 
 
-
-
-
-
-grp.by.binge <- lab %>% group_by(binge.drinking) %>% summarise(age_groups = mean(age.in.years))
-
-ggplot(grp.by.binge) + 
-  geom_bar(aes(x = binge.drinking, y = age_groups), stat = 'identity')
-
-
-# grp_by_both <- lab %>% group_by(binge.drinking, where.the.respondent.lives ) %>% 
-#   summarise(
-#     n = n()  ,
-#     percent = round(n/sum(n)*100, 2))
-
-grp_by_binge_lives <- group_by(lab, binge.drinking, where.the.respondent.lives )
-counts_by_lives <- summarize(grp_by_binge_lives, number_binges = n())
-
-counts_by_lives <- counts_by_lives[-c(1, 2, 3, 6, 11, 14), ]
-
-ggplot(counts_by_lives) + 
-  geom_bar(aes(x=binge.drinking, y=number_binges), stat = 'identity')
-
-
-
-
-
-ggplot(counts_by_lives) + 
-  geom_bar(aes(x = binge.drinking), position = position_dodge(preserve = 'single'))
-
-mm2<- melt(counts_by_lives, where.the.respondent.lives='group')
-
-ggplot(data = mm2, aes(x = binge.drinking, y = value, fill = variable)) + 
-  geom_col( )
-
-#summarized_count_lives <- summarize(counts_by_lives, sum_binges = sum(number_binges))
-
-ggplot(counts_by_lives) + 
-  geom_bar(aes(x = binge.drinking, y = number_binges), stat = 'identity')
+# 
+# 
+# 
+# grp.by.binge <- lab %>% group_by(binge.drinking) %>% summarise(age_groups = mean(age.in.years))
+# 
+# ggplot(grp.by.binge) + 
+#   geom_bar(aes(x = binge.drinking, y = age_groups), stat = 'identity')
+# 
+# 
+# # grp_by_both <- lab %>% group_by(binge.drinking, where.the.respondent.lives ) %>% 
+# #   summarise(
+# #     n = n()  ,
+# #     percent = round(n/sum(n)*100, 2))
+# 
+# grp_by_binge_lives <- group_by(lab, binge.drinking, where.the.respondent.lives )
+# counts_by_lives <- summarize(grp_by_binge_lives, number_binges = n())
+# 
+# counts_by_lives <- counts_by_lives[-c(1, 2, 3, 6, 11, 14), ]
+# 
+# ggplot(counts_by_lives) + 
+#   geom_bar(aes(x=binge.drinking, y=number_binges), stat = 'identity')
+# 
+# 
+# 
+# 
+# 
+# ggplot(counts_by_lives) + 
+#   geom_bar(aes(x = binge.drinking), position = position_dodge(preserve = 'single'))
+# 
+# mm2<- melt(counts_by_lives, where.the.respondent.lives='group')
+# 
+# ggplot(data = mm2, aes(x = binge.drinking, y = value, fill = variable)) + 
+#   geom_col( )
+# 
+# #summarized_count_lives <- summarize(counts_by_lives, sum_binges = sum(number_binges))
+# 
+# ggplot(counts_by_lives) + 
+#   geom_bar(aes(x = binge.drinking, y = number_binges), stat = 'identity')
