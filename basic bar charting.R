@@ -82,14 +82,19 @@ unique(lab$has.a.drinking.problem)   #like DISTINCT in sql
 unique(nonGreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
 unique(GreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
 
-summary(lab %>% distinct(lab$where.the.respondent.lives, lab$has.a.drinking.problem, .keep_all = TRUE))
+lab %>% distinct(lab$where.the.respondent.lives, lab$has.a.drinking.problem, .keep_all = TRUE)
 
 #######################################
 table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
 table(nonGreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
 table(GreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
-
-
+##
+lab %>% distinct(where.the.respondent.lives, has.a.drinking.problem, .keep_all = TRUE)
+##
+nonGreeksWithScores %>% distinct(where.the.respondent.lives, has.a.drinking.problem, .keep_all = TRUE)
+##
+GreeksWithScores %>% distinct(where.the.respondent.lives, has.a.drinking.problem, .keep_all = TRUE)
+##
 
 
 ggplot(lab) +
