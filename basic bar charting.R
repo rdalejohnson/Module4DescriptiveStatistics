@@ -39,6 +39,18 @@ ggplot(by_hwy_mpg) +
 
 lab=read.csv("Greek_Residence.csv")
 
+nonGreeksWithScores <- 
+  select(filter(lab, where.the.respondent.lives == "Lives Other" & has.a.drinking.problem > 0), c(where.the.respondent.lives, has.a.drinking.problem))
+
+table(nonGreeksWithScores)
+summary(nonGreeksWithScores)
+
+
+GreeksWithScores <- 
+  select(filter(lab, where.the.respondent.lives == "Lives in Fraternity or Sorority" & has.a.drinking.problem != ""), c(where.the.respondent.lives, has.a.drinking.problem))
+
+table(GreeksWithScores)
+summary(GreeksWithScores)
 
 ggplot(lab) +
   geom_bar(aes(x = gender))
