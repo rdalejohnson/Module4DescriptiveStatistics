@@ -39,11 +39,27 @@ ggplot(by_hwy_mpg) +
 
 lab=read.csv("Greek_Residence.csv")
 
+unique(lab$has.a.drinking.problem)
+table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
+summary(lab$has.a.drinking.problem)
+unique(lab$has.a.drinking.problem)  #like DISTINCT in sql
+table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
+sd(lab$has.a.drinking.problem, na.rm=TRUE)
+mean(lab$has.a.drinking.problem, na.rm=TRUE)
+var(lab$has.a.drinking.problem, na.rm=TRUE)
+median(lab$has.a.drinking.problem, na.rm=TRUE)
+
 nonGreeksWithScores <- 
   select(filter(lab, where.the.respondent.lives == "Lives Other" & has.a.drinking.problem > 0), c(where.the.respondent.lives, has.a.drinking.problem))
 
 table(nonGreeksWithScores)
 summary(nonGreeksWithScores)
+unique(nonGreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
+table(nonGreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
+sd(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+mean(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+var(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+median(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 
 
 GreeksWithScores <- 
@@ -51,6 +67,30 @@ GreeksWithScores <-
 
 table(GreeksWithScores)
 summary(GreeksWithScores)
+unique(GreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
+table(GreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
+sd(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+mean(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+var(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+median(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+
+
+
+##### PUTTING THE VARIOUS OUTPUTS INTO GROUPS
+########################################
+unique(lab$has.a.drinking.problem)   #like DISTINCT in sql
+unique(nonGreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
+unique(GreeksWithScores$has.a.drinking.problem)  #like DISTINCT in sql
+
+summary(lab %>% distinct(lab$where.the.respondent.lives, lab$has.a.drinking.problem, .keep_all = TRUE))
+
+#######################################
+table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
+table(nonGreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
+table(GreeksWithScores$has.a.drinking.problem)  #gives you frequency counts for the unique values
+
+
+
 
 ggplot(lab) +
   geom_bar(aes(x = gender))
