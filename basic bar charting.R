@@ -42,12 +42,26 @@ lab=read.csv("Greek_Residence.csv")
 unique(lab$has.a.drinking.problem)
 table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
 summary(lab$has.a.drinking.problem)
-unique(lab$has.a.drinking.problem)  #like DISTINCT in sql
-table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
+#unique(lab$has.a.drinking.problem)  #like DISTINCT in sql
+#table(lab$has.a.drinking.problem)  #gives you frequency counts for the unique values
 sd(lab$has.a.drinking.problem, na.rm=TRUE)
 mean(lab$has.a.drinking.problem, na.rm=TRUE)
 var(lab$has.a.drinking.problem, na.rm=TRUE)
 median(lab$has.a.drinking.problem, na.rm=TRUE)
+
+
+
+anyWithScoresAndProblems <- 
+  select(filter(lab, where.the.respondent.lives != "" & has.a.drinking.problem > 0), c(where.the.respondent.lives, has.a.drinking.problem))
+
+table(anyWithScoresAndProblems)
+summary(anyWithScoresAndProblems)
+unique(anyWithScoresAndProblems$has.a.drinking.problem)  #like DISTINCT in sql
+sd(anyWithScoresAndProblems$has.a.drinking.problem, na.rm=TRUE)
+mean(anyWithScoresAndProblems$has.a.drinking.problem, na.rm=TRUE)
+var(anyWithScoresAndProblems$has.a.drinking.problem, na.rm=TRUE)
+median(anyWithScoresAndProblems$has.a.drinking.problem, na.rm=TRUE)
+
 
 nonGreeksWithScores <- 
   select(filter(lab, where.the.respondent.lives == "Lives Other" & has.a.drinking.problem > 0), c(where.the.respondent.lives, has.a.drinking.problem))
@@ -60,6 +74,8 @@ sd(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 mean(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 var(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 median(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+IQR(nonGreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+
 
 
 GreeksWithScores <- 
@@ -73,6 +89,71 @@ sd(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 mean(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 var(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
 median(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+IQR(GreeksWithScores$has.a.drinking.problem, na.rm=TRUE)
+
+
+#boxplot(GreeksWithScores$has.a.drinking.problem, horizontal=TRUE)
+
+greek_score_plot <-
+  boxplot(GreeksWithScores$has.a.drinking.problem,
+          main = "Greek-Living Drinking Problem Scores (10 item questionnaire)",
+          xlab = "Scores for 46 Students",
+          xaxp  = c(10, 30, 4),
+          col = "orange",
+          border = "brown",
+          horizontal = TRUE,
+          notch = TRUE)
+
+greek_score_plot
+greekOutVals = greek_score_plot$out
+
+
+nongreek_score_plot <-
+  boxplot(nonGreeksWithScores$has.a.drinking.problem,
+          main = "NONGreek-Living Drinking Problem Scores (10 item questionnaire)",
+          xaxp  = c(10, 30, 4),
+          
+          col = "orange",
+          border = "brown",
+          horizontal = TRUE,
+          notch = TRUE)
+
+nongreek_score_plot
+nongreekOutVals = nongreek_score_plot$out
+# nonGreeksWithScoresEXC.Outliers <- 
+#   select(filter(lab, where.the.respondent.lives == "Lives Other" & has.a.drinking.problem > 0 &
+#                   has.a.drinking.problem <= 24.5 ), c(where.the.respondent.lives, has.a.drinking.problem))
+
+summary(nonGreeksWithScoresEXC.Outliers$has.a.drinking.problem)
+
+#c1 <- cut(GreeksWithScores$has.a.drinking.problem, breaks = c(-Inf, 10, 20, 30, 40))
+#table(c1)
+
+c2 <- cut(nonGreeksWithScores$has.a.drinking.problem, #breaks = c(-Inf, 10, 20, 30, 40))
+            breaks = seq(1, 38, by = 3), na.rm=TRUE)
+table(c2)
+c1 <- cut(GreeksWithScores$has.a.drinking.problem, #breaks = c(-Inf, 10, 20, 30, 40))
+          breaks = seq(1, 38, by = 3), na.rm=TRUE)
+table(c1)
+
+c1df = as.matrix(table(c1))
+c2df = as.matrix(table(c2))
+
+dfRanges <- data.frame(c1df, c2df)
+
+
+
+c22 <- cut(nonGreeksWithScores$has.a.drinking.problem, #breaks = c(-Inf, 10, 20, 30, 40))
+          breaks = seq(1, 38, by = 6), na.rm=TRUE)
+table(c22)
+c12 <- cut(GreeksWithScores$has.a.drinking.problem, #breaks = c(-Inf, 10, 20, 30, 40))
+          breaks = seq(1, 38, by = 6), na.rm=TRUE)
+table(c12)
+
+c12df = as.matrix(table(c12))
+c22df = as.matrix(table(c22))
+
+dfRanges2 <- data.frame(c12df, c22df)
 
 
 
