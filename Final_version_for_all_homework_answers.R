@@ -7,11 +7,14 @@ library(gmodels)
 # read your file
 lab=read.csv("Greek_Residence.csv")
 
-#lab$gender <- factor(lab$gender,labels=c("Male", "Female", "NA/Blank"))
+#https://stackoverflow.com/questions/5824173/replace-a-value-in-a-data-frame-based-on-a-conditional-if-statement
 
-#lab <- lab %>% mutate(gender = ifelse(lab$gender == "", "NA/Blank", gender))
+lab$gender <- as.character(lab$gender)
 
-lab$gender[which(lab$gender == "")] <- "NA/Blank"
+lab <- lab %>% mutate(gender = ifelse(lab$gender == "", "NA/Blank", gender))
+
+lab$gender <- as.factor(lab$gender)
+
 
 #Build the starting table of values and counts
 
@@ -19,9 +22,6 @@ labGenderSummary = as.data.frame(table(lab$gender))
 
 colnames(labGenderSummary) <- c("Gender.Code","Frequency.Count")
 
-#adding a row (rbind) for the NA count
-
-#sum(lab$gender == "")
 
 # labGenderSummary <- rbind(labGenderSummary, 
 #   data.frame(
