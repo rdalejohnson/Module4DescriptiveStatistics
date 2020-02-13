@@ -9,6 +9,8 @@ lab=read.csv("Greek_Residence.csv")
 
 #https://stackoverflow.com/questions/5824173/replace-a-value-in-a-data-frame-based-on-a-conditional-if-statement
 
+##################### GENDER SUMMARY ****************************
+
 lab$gender <- as.character(lab$gender)
 
 lab <- lab %>% mutate(gender = ifelse(lab$gender == "", "NA/Blank", gender))
@@ -37,7 +39,7 @@ labGenderSummary <- mutate(labGenderSummary,
 
 labGenderSummary
 
-#########################
+##################### WHERE LIVES SUMMARY ****************************
 
 
 lab$where.the.respondent.lives <- as.character(lab$where.the.respondent.lives)
@@ -69,14 +71,61 @@ labWhereLivesSummary <- mutate(labWhereLivesSummary,
 
 labWhereLivesSummary
 
-#########################
+
+##################### BINGE DRINKING SUMMARY ****************************
+
+
+lab$binge.drinking <- as.character(lab$binge.drinking)
+
+lab <- lab %>% 
+  mutate(binge.drinking = 
+           ifelse(lab$binge.drinking == "", "NA/Blank", binge.drinking))
+
+lab$binge.drinking <- as.factor(lab$binge.drinking)
+
+
+#Build the starting table of values and counts
+
+labBingesSummary = as.data.frame(table(lab$binge.drinking))
+
+colnames(labBingesSummary) <- c("Gender.Code","Frequency.Count")
+
+
+# labGenderSummary <- rbind(labGenderSummary, 
+#   data.frame(
+#     "Gender.Code" = "NA" , 
+#     "Frequency.Count" = sum(is.na(lab$gender) || length(lab$gender) == 0) )  )
+#   )
+
+#Add a percentage-of-total column rounded to 2 decimal places
+
+labBingesSummary <- mutate(labBingesSummary,
+                               binges.Percent = round(Frequency.Count/sum(Frequency.Count)*100, 2) )
+
+labBingesSummary
+
+
+#################### AGE IN YEARS SUMMARY **********************************
+
+
+labAgeInYearsSummary = as.data.frame(table(lab$age.in.years))
+
+colnames(labAgeInYearsSummary) <- c("Age.Value","Frequency.Count")
 
 
 
+labAgeSummary <- as.data.frame.matrix(summary(lab$age.in.years)
+                                      
+                                      
+mean(lab$age.in.years, na.rm=TRUE)
+                                      
+#Add columns for the other descriptive stats here
+
+labAgeInYearsSummary <- mutate(labAgeInYearsSummary,
+                               ages.Percent = round(Frequency.Count/sum(Frequency.Count)*100, 2) )
 
 
-tableGender <- table(lab$gender)
-prop.table(tableGender)
+
 
 
 

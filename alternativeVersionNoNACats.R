@@ -49,6 +49,8 @@ labs.number_of_rows <- nrow(lab)
 
 mean(lab$age.in.years, na.rm=TRUE)
 
+#Add columns for the other descriptive stats here
+
 
 
 table2 <- table(lab$gender)
