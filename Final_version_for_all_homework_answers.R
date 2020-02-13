@@ -40,6 +40,38 @@ labGenderSummary
 #########################
 
 
+lab$where.the.respondent.lives <- as.character(lab$where.the.respondent.lives)
+
+lab <- lab %>% 
+      mutate(where.the.respondent.lives = 
+                ifelse(lab$where.the.respondent.lives == "", "NA/Blank", where.the.respondent.lives))
+
+lab$where.the.respondent.lives <- as.factor(lab$where.the.respondent.lives)
+
+
+#Build the starting table of values and counts
+
+labWhereLivesSummary = as.data.frame(table(lab$where.the.respondent.lives))
+
+colnames(labWhereLivesSummary) <- c("Gender.Code","Frequency.Count")
+
+
+# labGenderSummary <- rbind(labGenderSummary, 
+#   data.frame(
+#     "Gender.Code" = "NA" , 
+#     "Frequency.Count" = sum(is.na(lab$gender) || length(lab$gender) == 0) )  )
+#   )
+
+#Add a percentage-of-total column rounded to 2 decimal places
+
+labWhereLivesSummary <- mutate(labWhereLivesSummary,
+                           WhereLives.Percent = round(Frequency.Count/sum(Frequency.Count)*100, 2) )
+
+labWhereLivesSummary
+
+#########################
+
+
 
 
 
