@@ -112,32 +112,30 @@ labAgeInYearsSummary = as.data.frame(table(lab$age.in.years))
 
 colnames(labAgeInYearsSummary) <- c("Age.Value","Frequency.Count")
 
-
-
-labAgeSummary <- as.data.frame.matrix(summary(lab$age.in.years)
-                                      
-                                      
-mean(lab$age.in.years, na.rm=TRUE)
-                                      
-#Add columns for the other descriptive stats here
+labAgeInYearsSummary <- rbind(labAgeInYearsSummary,
+  data.frame(
+     "Age.Value"= "NA" ,
+    "Frequency.Count" = sum(is.na(lab$age.in.years)  )  )
+  )
 
 labAgeInYearsSummary <- mutate(labAgeInYearsSummary,
                                ages.Percent = round(Frequency.Count/sum(Frequency.Count)*100, 2) )
 
+sum(labAgeInYearsSummary$Frequency.Count)
+sum(labAgeInYearsSummary$ages.Percent)
+
+min(lab$age.in.years, na.rm=TRUE)                                      
+max(lab$age.in.years, na.rm=TRUE)                                      
+mean(lab$age.in.years, na.rm=TRUE)
+median(lab$age.in.years, na.rm=TRUE)
+
+percent
+as.data.frame.table (quantile(lab$age.in.years, na.rm=TRUE))
+
+#Add columns for the other descriptive stats here
 
 
 
+summary(lab$age.in.years)
 
 
-lab <- lab %>% mutate(gender = ifelse(is.na(gender) == TRUE, 99, gender))
-lab <- lab %>% mutate(class = ifelse(is.na(class) == TRUE, 99, class))
-lab <- lab %>% mutate(fratsoro = ifelse(is.na(fratsoro) == TRUE, 99, fratsoro))
-lab <- lab %>% mutate(drinks5 = ifelse(is.na(drinks5) == TRUE, 99, drinks5))
-lab <- lab %>% mutate(livewith = ifelse(is.na(livewith) == TRUE, 99, livewith))
-
-lab$gender <- factor(lab$gender,labels=c("Male", "Female", "U"))
-lab$class <- factor(lab$class,labels=c("Fr", "So", "Jr", "Sn", "5+", "U"))
-#lab$fratsoro <- factor(lab$fratsoro,labels=c("N", "Y", "U"))
-lab$drinks5 <- factor(lab$drinks5,labels=c("None", "1", "2", "3-5", 
-                                           "6-9", "10+", "U"), ordered=TRUE)
-lab$livewith <- factor(lab$livewith,labels=c("N", "Y", "U"), ordered=TRUE)
