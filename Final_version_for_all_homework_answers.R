@@ -129,8 +129,32 @@ max(lab$age.in.years, na.rm=TRUE)
 mean(lab$age.in.years, na.rm=TRUE)
 median(lab$age.in.years, na.rm=TRUE)
 
-percent
-as.data.frame.table (quantile(lab$age.in.years, na.rm=TRUE))
+quart <- function(x) {
+  x <- sort(x)
+  n <- length(x)
+  m <- (n+1)/2
+  if (floor(m) != m) {
+    l <- m-1/2; u <- m+1/2
+  } else {
+    l <- m-1; u <- m+1
+  }
+  c(Q1=median(x[1:l]), Q3=median(x[u:n]))
+}
+
+y <- matrix(NA, 2, 10)
+rownames(y) <- c("Q1", "Q3")
+colnames(y) <- c(1:9, "Quart")
+for (n in 3:5) {
+  j <- 1
+  for (i in 1:9) {
+    y[, i] <- quantile(1:n, probs=c(1/4, 3/4), type=i)
+  }
+  y[, 10] <- quart(1:n)
+  cat("\n", n, ":\n")
+  print(y, digits=2)
+}
+
+quartilz = as.data.frame( quart(lab$age.in.years))
 
 #Add columns for the other descriptive stats here
 
